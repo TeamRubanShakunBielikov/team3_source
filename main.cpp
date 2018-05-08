@@ -1,6 +1,7 @@
 #include <iostream>
 #include <QStringList>
 #include <QString>
+#include<sstream>
 
 using namespace std;
 
@@ -9,25 +10,37 @@ std::string orthogonality(std::string arg)
     std::pair<int, int> a;
     std::pair<int, int> b;
 
-    int sum1=0;
-    int sum2=0;
+    int sum1=1;
+    int sum2=1;
 
-    QStringList temp;
-    QString str = QString::fromStdString(arg);
-    for(int i=0; i<arg.length();i++)
+    bool flag = false;
+    for(int i=0;i<arg.length();++i)
     {
-        if(arg[i]>='0' && arg[i]<='9')
+        int a=0;
+        if (arg[i] <= '9' && arg[i] >= '0')
         {
-            if(i%2!=0)
+            if(arg[i-1]=='-')
             {
-                sum1+=(int)arg[i];
+                a=(arg[i]-'0')*(-1);
             }
             else
             {
-                sum2+=(int)arg[i];
+                a=(arg[i]-'0');
+            }
+
+            if(flag==false)
+            {
+                sum1*=a;
+                flag=true;
+            }
+            else
+            {
+                flag=false;
+                sum2*=a;
             }
         }
     }
+
     if((sum1+sum2)==0)
     {
         return "1";
@@ -36,14 +49,6 @@ std::string orthogonality(std::string arg)
     {
         return "0";
     }
-
-    QStringListIterator it(temp);
-    while(it.hasNext())
-    {
-        cout<<it.next().toLocal8Bit().constData()<<" ";
-    }
-    return "";
-
 }
 
 std::string process(std::string id, std::string arg)
@@ -231,7 +236,7 @@ std::string process(std::string id, std::string arg)
 int main()
 {
     string a= "110";
-    string b= "{1,1},{2,2}";
+    string b= "{1,0},{4,-2}";
     cout<<process(a, b)<<endl;
     return 0;
 }
