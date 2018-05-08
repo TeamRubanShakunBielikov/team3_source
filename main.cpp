@@ -154,181 +154,181 @@ std::string complanation(std::string arg)
 
 std::string process(std::string id, std::string arg)
 {
-    int a=stoi(id);
+    int _id=stoi(id);
 
-    if(a<1 || a>896)
+    if(_id<1 || _id>896)
     {
         return "";
     }
-    else if(a>=1 && a<=40)
+    else if(_id>=1 && _id<=40)
     {
         return "";
     }
-    else if(a>=41 && a<=60)
+    else if(_id>=41 && _id<=60)
     {
         return "";
     }
-    else if(a>=61 && a<=80)
+    else if(_id>=61 && _id<=80)
     {
         return "";
     }
-    else if(a>=81 && a<=100)
+    else if(_id>=81 && _id<=100)
     {
         return "";
     }
-    else if(a>=101 && a<=120)
+    else if(_id>=101 && _id<=120)
     {
         return orthogonality(arg);
     }
-    else if(a>=121 && a<=140)
+    else if(_id>=121 && _id<=140)
     {
         return complanation(arg);
     }
-    else if(a>=141 && a<=160)
+    else if(_id>=141 && _id<=160)
     {
         return "";
     }
-    else if(a>=161 && a<=180)
+    else if(_id>=161 && _id<=180)
     {
         return "";
     }
-    else if(a>=181 && a<=200)
+    else if(_id>=181 && _id<=200)
     {
         return "";
     }
-    else if(a>=201 && a<=220)
+    else if(_id>=201 && _id<=220)
     {
         return "";
     }
-    else if(a>=221 && a<=240)
+    else if(_id>=221 && _id<=240)
     {
         return "";
     }
-    else if(a>=241 && a<=260)
+    else if(_id>=241 && _id<=260)
     {
         return "";
     }
-    else if(a>=261 && a<=280)
+    else if(_id>=261 && _id<=280)
     {
         return "";
     }
-    else if(a>=281 && a<=300)
+    else if(_id>=281 && _id<=300)
     {
         return "";
     }
-    else if(a>=301 && a<=320)
+    else if(_id>=301 && _id<=320)
     {
         return "";
     }
-    else if(a>=321 && a<=340)
+    else if(_id>=321 && _id<=340)
     {
         return "";
     }
-    else if(a>=341 && a<=360)
+    else if(_id>=341 && _id<=360)
     {
         return "";
     }
-    else if(a>=361 && a<=380)
+    else if(_id>=361 && _id<=380)
     {
         return "";
     }
-    else if(a>=381 && a<=400)
+    else if(_id>=381 && _id<=400)
     {
         return "";
     }
-    else if(a>=401 && a<=420)
+    else if(_id>=401 && _id<=420)
     {
         return "";
     }
-    else if(a>=421 && a<=440)
+    else if(_id>=421 && _id<=440)
     {
         return "";
     }
-    else if(a>=441 && a<=460)
+    else if(_id>=441 && _id<=460)
     {
         return "";
     }
-    else if(a>=461 && a<=480)
+    else if(_id>=461 && _id<=480)
     {
         return "";
     }
-    else if(a>=481 && a<=500)
+    else if(_id>=481 && _id<=500)
     {
         return "";
     }
-    else if(a>=501 && a<=520)
+    else if(_id>=501 && _id<=520)
     {
         return "";
     }
-    else if(a>=521 && a<=540)
+    else if(_id>=521 && _id<=540)
     {
         return "";
     }
-    else if(a>=541 && a<=560)
+    else if(_id>=541 && _id<=560)
     {
         return "";
     }
-    else if(a>=561 && a<=580)
+    else if(_id>=561 && _id<=580)
     {
         return "";
     }
-    else if(a>=581 && a<=600)
+    else if(_id>=581 && _id<=600)
     {
         return "";
     }
-    else if(a>=601 && a<=620)
+    else if(_id>=601 && _id<=620)
     {
         return "";
     }
-    else if(a>=621 && a<=640)
+    else if(_id>=621 && _id<=640)
     {
         return "";
     }
-    else if(a>=641 && a<=660)
+    else if(_id>=641 && _id<=660)
     {
         return "";
     }
-    else if(a>=661 && a<=680)
+    else if(_id>=661 && _id<=680)
     {
         return "";
     }
-    else if(a>=681 && a<=700)
+    else if(_id>=681 && _id<=700)
     {
         return "";
     }
-    else if(a>=701 && a<=720)
+    else if(_id>=701 && _id<=720)
     {
         return "";
     }
-    else if(a>=741 && a<=760)
+    else if(_id>=741 && _id<=760)
     {
         return "";
     }
-    else if(a>=761 && a<=780)
+    else if(_id>=761 && _id<=780)
     {
         return "";
     }
-    else if(a>=781 && a<=800)
+    else if(_id>=781 && _id<=800)
     {
         return "";
     }
-    else if(a>=801 && a<=820)
+    else if(_id>=801 && _id<=820)
     {
         return "";
     }
-    else if(a>=821 && a<=840)
+    else if(_id>=821 && _id<=840)
     {
         return "";
     }
-    else if(a>=841 && a<=860)
+    else if(_id>=841 && _id<=860)
     {
         return "";
     }
-    else if(a>=861 && a<=880)
+    else if(_id>=861 && _id<=880)
     {
         return "";
     }
-    else if(a>=881 && a<=896)
+    else if(_id>=881 && _id<=896)
     {
         return "";
     }
