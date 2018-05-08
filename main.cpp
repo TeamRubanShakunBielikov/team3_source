@@ -1,7 +1,5 @@
 #include <iostream>
-#include <QStringList>
-#include <QString>
-#include<sstream>
+#include <vector>
 
 using namespace std;
 
