@@ -46,6 +46,7 @@ std::string orthogonality(std::string arg)
                 jumper=1;
             }
         }
+
         else
         {
             if(i==arg.length()-1)
