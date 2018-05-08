@@ -1,34 +1,63 @@
 #include <iostream>
 #include <QStringList>
 #include <QString>
+#include<sstream>
 
 using namespace std;
 
+//Scalar product must be 0
 std::string orthogonality(std::string arg)
 {
-    std::pair<int, int> a;
-    std::pair<int, int> b;
+    std::vector<std::vector<int>> matrix;
+    std::vector<int> temp;
 
-    int sum1=0;
-    int sum2=0;
-
-    QStringList temp;
-    QString str = QString::fromStdString(arg);
-    for(int i=0; i<arg.length();i++)
+    int jumper=0;
+    std::string temp_s;
+    for(int i=0;i<arg.length();)
     {
+        temp_s="";
+        int a=0;
         if(arg[i]>='0' && arg[i]<='9')
         {
-            if(i%2!=0)
+            if(arg[i-1]=='-')
             {
-                sum1+=(int)arg[i];
+                temp_s+=arg[i-1];
+            }
+
+            while(arg[i]>='0' && arg[i]<='9')
+            {
+                temp_s+=arg[i];
+                i++;
+            }
+
+            a=stoi(temp_s);
+
+            if(jumper<2)
+            {
+                temp.push_back(a);
+                jumper++;
             }
             else
             {
-                sum2+=(int)arg[i];
+                matrix.push_back(temp);
+                temp.erase(temp.begin(),temp.end());
+                temp.shrink_to_fit();
+                temp.push_back(a);
+                jumper=1;
             }
         }
+        else
+        {
+            if(i==arg.length()-1)
+            {
+                matrix.push_back(temp);
+            }
+            i++;
+        }
     }
-    if((sum1+sum2)==0)
+
+    int produce = (matrix[0][0]*matrix[1][0]) + (matrix[0][1]*matrix[1][1]);
+    if(produce==0)
     {
         return "1";
     }
@@ -37,13 +66,89 @@ std::string orthogonality(std::string arg)
         return "0";
     }
 
-    QStringListIterator it(temp);
-    while(it.hasNext())
+    //PRINT
+    for(int i=0;i<matrix.size();++i)
     {
-        cout<<it.next().toLocal8Bit().constData()<<" ";
+        for(int j=0;j<matrix.size();++j)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
     }
-    return "";
+}
 
+//Mixed product must be 0
+std::string complanation(std::string arg)
+{
+    std::vector<std::vector<int>> matrix;
+    std::vector<int> temp;
+
+    std::string temp_s;
+    int jumper=0;
+    for(int i=0;i<arg.length();)
+    {
+        temp_s="";
+        int a=0;
+        if(arg[i]>='0' && arg[i]<='9')
+        {
+            if(arg[i-1]=='-')
+            {
+                temp_s+=arg[i-1];
+            }
+
+            while(arg[i]>='0' && arg[i]<='9')
+            {
+                temp_s+=arg[i];
+                i++;
+            }
+
+            a = stoi(temp_s);
+
+            if(jumper<3)
+            {
+                temp.push_back(a);
+                jumper++;
+            }
+            else
+            {
+                matrix.push_back(temp);
+                temp.erase(temp.begin(),temp.end());
+                temp.shrink_to_fit();
+                temp.push_back(a);
+                jumper=1;
+            }
+        }
+        else
+        {
+            if(i==arg.length()-1)
+            {
+                matrix.push_back(temp);
+            }
+            i++;
+        }
+    }
+
+    int determ = (matrix[0][0]*matrix[1][1]*matrix[2][2]) + (matrix[0][1]*matrix[1][2]*matrix[2][0]) + (matrix[1][0]*matrix[0][2]*matrix[2][1])
+            - (matrix[2][0]*matrix[1][1]*matrix[0][2]) - (matrix[0][1]*matrix[1][0]*matrix[2][2]) - (matrix[0][0]*matrix[1][2]*matrix[2][1]);
+
+    if(determ==0)
+    {
+        return "1";
+    }
+    else
+    {
+        return "0";
+    }
+
+    //PRINT
+    for(int i=0;i<matrix.size();++i)
+    {
+        for(int j=0;j<matrix.size();++j)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
 }
 
 std::string process(std::string id, std::string arg)
@@ -76,7 +181,7 @@ std::string process(std::string id, std::string arg)
     }
     else if(a>=121 && a<=140)
     {
-        return "";
+        return complanation(arg);
     }
     else if(a>=141 && a<=160)
     {
@@ -230,8 +335,14 @@ std::string process(std::string id, std::string arg)
 
 int main()
 {
+    //FOR ORTHOGONALITY
     string a= "110";
-    string b= "{1,1},{2,2}";
+    string b= "{1,2},{2,-1}";
+
+    //FOR COMPLANATION
+    string c="130";
+    string d="{1,1,1},{1,3,1},{2,2,2}";
+
     cout<<process(a, b)<<endl;
     return 0;
 }
