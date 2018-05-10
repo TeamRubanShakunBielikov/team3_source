@@ -3,6 +3,7 @@
 #include<sstream>
 #include <vector>
 #include <algorithm>
+#include <iomanip>
 
 //PARSERS
 
@@ -185,7 +186,7 @@ std::string addition_to_plural(std::string arg)
     return full;
 }
 
-
+//LOOK AT ME!!!!
 //NEED TO OPTIMISATION!!!!!!!!!!
 std::string operations_wth_plurals(std::string arg)
 {
@@ -265,6 +266,38 @@ std::string operations_wth_plurals(std::string arg)
     return std::to_string(Union.size())+","+std::to_string(Section.size())+","+std::to_string(A.size())+","+std::to_string(B.size());
 }
 
+std::string to_radian(std::string arg)
+{
+    std::vector<double> Point;
+    #define PI 3.14159265
+
+    //PARSE
+    for(int i=0;i<arg.length();++i)
+    {
+        std::string temp_s="";
+        int a=0;
+        if(arg[i]>='0' && arg[i]<='9')
+        {
+            if(arg[i-1]=='-')
+            {
+                temp_s+=arg[i-1];
+            }
+
+            while(arg[i]>='0' && arg[i]<='9')
+            {
+                temp_s+=arg[i];
+                i++;
+            }
+
+            a = stoi(temp_s);
+
+            Point.push_back(a);
+        }
+    }
+
+    return std::to_string(sqrt(pow(Point[0],2)+pow(Point[1],2)))+","+std::to_string(atan(Point[1]/Point[0])*180/PI);
+}
+
 std::string process(std::string id, std::string arg)
 {
     int _id=stoi(id);
@@ -323,7 +356,7 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=261 && _id<=280)
     {
-        return "";
+        return to_radian(arg);
     }
     else if(_id>=281 && _id<=300)
     {
@@ -472,6 +505,10 @@ int main()
     //FOR COUNT IN UNION, SECTION, DIFFERENCE
     std::string a3="250";
     std::string b3="05A,7C";
-    std::cout<<process(a3, b3)<<std::endl;
+
+    //FOR TO RADIAN
+    std::string a4="270";
+    std::string b4="0,10";
+    std::cout<<process(a4, b4)<<std::endl;
     return 0;
 }
