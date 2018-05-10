@@ -185,6 +185,86 @@ std::string addition_to_plural(std::string arg)
     return full;
 }
 
+
+//NEED TO OPTIMISATION!!!!!!!!!!
+std::string operations_wth_plurals(std::string arg)
+{
+    std::string A, B, Section, Union, DiffA_B, DiffB_A;
+
+    //PARSE
+    size_t pos= arg.find(",");
+    for(int i=0;i<arg.size();++i)
+    {
+        if(arg[i]!=',')
+        {
+            A.push_back(arg[i]);
+        }
+        else
+        {
+            B=arg.substr(pos+1);
+            break;
+        }
+    }
+
+    //UNION
+    Union=A+B;
+
+    for(int i = 0; i < Union.size(); i++)
+    {
+        int j = i+1;
+        while (j<Union.size())
+        {
+            if(Union[i]==Union[j])
+            {
+                Union.erase(j,1);
+            }
+            else
+            {
+                j++;
+            }
+        }
+    }
+
+    //SECTION
+    for(int i=0;i<A.size();++i)
+    {
+        for(int j=0;j<B.size();++j)
+        {
+            if(B[j]==A[i])
+            {
+                Section.push_back(B[j]);
+            }
+        }
+    }
+
+    //DiffA_B
+    for(int i=0;i<A.size();++i)
+    {
+        for(int j=0;j<B.size();++j)
+        {
+
+            if(B[j]==A[i])
+            {
+                A.erase(std::remove(A.begin(),A.end(),A[i]),A.end());
+            }
+        }
+    }
+
+    //DiffB_A
+    for(int i=0;i<B.size();++i)
+    {
+        for(int j=0;j<A.size();++j)
+        {
+            if(B[i]==A[j])
+            {
+                B.erase(std::remove(B.begin(),B.end(),B[i]),B.end());
+            }
+        }
+    }
+
+    return std::to_string(Union.size())+","+std::to_string(Section.size())+","+std::to_string(A.size())+","+std::to_string(B.size());
+}
+
 std::string process(std::string id, std::string arg)
 {
     int _id=stoi(id);
@@ -239,7 +319,7 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=241 && _id<=260)
     {
-        return "";
+        return operations_wth_plurals(arg);
     }
     else if(_id>=261 && _id<=280)
     {
@@ -389,6 +469,9 @@ int main()
     std::string a2="230";
     std::string b2="579ABCE";
 
-    std::cout<<process(a2, b2)<<std::endl;
+    //FOR COUNT IN UNION, SECTION, DIFFERENCE
+    std::string a3="250";
+    std::string b3="05A,7C";
+    std::cout<<process(a3, b3)<<std::endl;
     return 0;
 }
