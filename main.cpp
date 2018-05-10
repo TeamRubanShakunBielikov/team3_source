@@ -2,8 +2,7 @@
 #include <cmath>
 #include<sstream>
 #include <vector>
-
-using namespace std;
+#include <algorithm>
 
 //PARSERS
 
@@ -173,6 +172,19 @@ std::string volume_of_parallelepiped(std::string arg)
     return std::to_string(abs(determ));
 }
 
+
+std::string addition_to_plural(std::string arg)
+{
+    std::string full="0123456789ABCDEF";
+
+    for(int i=0;i<arg.size();++i)
+    {
+        full.erase(std::remove(full.begin(),full.end(),arg[i]),full.end());
+    }
+
+    return full;
+}
+
 std::string process(std::string id, std::string arg)
 {
     int _id=stoi(id);
@@ -223,7 +235,7 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=221 && _id<=240)
     {
-        return "";
+        return addition_to_plural(arg);
     }
     else if(_id>=241 && _id<=260)
     {
@@ -358,22 +370,25 @@ std::string process(std::string id, std::string arg)
 int main()
 {
     //FOR ORTHOGONALITY
-    string a= "110";
-    string b= "{1,2},{2,-1}";
+    std::string a= "110";
+    std::string b= "{1,2},{2,-1}";
 
     //FOR SQUARE OF PARALLELEGRAMM
-    string a1= "175";
-    string b1= "{0,1},{1,5}";
+    std::string a1= "175";
+    std::string b1= "{0,1},{1,5}";
 
     //FOR COMPLANATION
-    string c="130";
-    string d="{1,1,1},{1,3,1},{2,2,2}";
+    std::string c="130";
+    std::string d="{1,1,1},{1,3,1},{2,2,2}";
 
     //FOR VOLUME OF PARALELEPIPED
-    string c1="141";
-    string d1="{19,-4,17},{-5,11,-9},{14,-2,19}";
+    std::string c1="141";
+    std::string d1="{19,-4,17},{-5,11,-9},{14,-2,19}";
 
+    //FOR ADDIRIONAL TO PLURAL
+    std::string a2="230";
+    std::string b2="579ABCE";
 
-    cout<<process(a1, b1)<<endl;
+    std::cout<<process(a2, b2)<<std::endl;
     return 0;
 }
