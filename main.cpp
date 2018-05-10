@@ -1,12 +1,66 @@
 #include <iostream>
-#include <QStringList>
-#include <QString>
+#include <cmath>
 #include<sstream>
+#include <vector>
 
 using namespace std;
 
-//Scalar product must be 0
-std::string orthogonality(std::string arg)
+//PARSERS
+
+std::vector<std::vector<int>> Parse_to_3x3(std::string arg)
+{
+    std::vector<std::vector<int>> matrix;
+    std::vector<int> temp;
+
+    std::string temp_s;
+    int jumper=0;
+    for(int i=0;i<arg.length();)
+    {
+        temp_s="";
+        int a=0;
+        if(arg[i]>='0' && arg[i]<='9')
+        {
+            if(arg[i-1]=='-')
+            {
+                temp_s+=arg[i-1];
+            }
+
+            while(arg[i]>='0' && arg[i]<='9')
+            {
+                temp_s+=arg[i];
+                i++;
+            }
+
+            a = stoi(temp_s);
+
+            if(jumper<3)
+            {
+                temp.push_back(a);
+                jumper++;
+            }
+            else
+            {
+                matrix.push_back(temp);
+                temp.erase(temp.begin(),temp.end());
+                temp.shrink_to_fit();
+                temp.push_back(a);
+                jumper=1;
+            }
+        }
+        else
+        {
+            if(i==arg.length()-1)
+            {
+                matrix.push_back(temp);
+            }
+            i++;
+        }
+    }
+ return matrix;
+}
+
+
+std::vector<std::vector<int>> Parse_to_2x2(std::string arg)
 {
     std::vector<std::vector<int>> matrix;
     std::vector<int> temp;
@@ -56,6 +110,15 @@ std::string orthogonality(std::string arg)
             i++;
         }
     }
+    return matrix;
+}
+
+
+
+//Scalar product must be 0
+std::string orthogonality(std::string arg)
+{
+    std::vector<std::vector<int>> matrix=Parse_to_2x2(arg);
 
     int produce = (matrix[0][0]*matrix[1][0]) + (matrix[0][1]*matrix[1][1]);
     if(produce==0)
@@ -66,68 +129,25 @@ std::string orthogonality(std::string arg)
     {
         return "0";
     }
+}
 
-    //PRINT
-    for(int i=0;i<matrix.size();++i)
-    {
-        for(int j=0;j<matrix.size();++j)
-        {
-            cout<<matrix[i][j]<<" ";
-        }
-        cout<<endl;
-    }
+std::string square_of_parellelegramm(std::string arg)
+{
+    std::vector<std::vector<int>> matrix = Parse_to_3x3(arg);
+
+
+    int produce = (matrix[0][0]*matrix[1][0]) + (matrix[0][1]*matrix[1][1]);
+    int len_a = sqrt(pow(matrix[0][0],2)+pow(matrix[0][1],2));
+    int len_b = sqrt(pow(matrix[0][0],2)+pow(matrix[0][1],2));
+    double temp = produce/(len_a*len_b);
+    return std::to_string(static_cast<int>(len_a*len_b*sin(acos(temp))));
 }
 
 //Mixed product must be 0
 std::string complanation(std::string arg)
 {
-    std::vector<std::vector<int>> matrix;
-    std::vector<int> temp;
+    std::vector<std::vector<int>> matrix = Parse_to_3x3(arg);
 
-    std::string temp_s;
-    int jumper=0;
-    for(int i=0;i<arg.length();)
-    {
-        temp_s="";
-        int a=0;
-        if(arg[i]>='0' && arg[i]<='9')
-        {
-            if(arg[i-1]=='-')
-            {
-                temp_s+=arg[i-1];
-            }
-
-            while(arg[i]>='0' && arg[i]<='9')
-            {
-                temp_s+=arg[i];
-                i++;
-            }
-
-            a = stoi(temp_s);
-
-            if(jumper<3)
-            {
-                temp.push_back(a);
-                jumper++;
-            }
-            else
-            {
-                matrix.push_back(temp);
-                temp.erase(temp.begin(),temp.end());
-                temp.shrink_to_fit();
-                temp.push_back(a);
-                jumper=1;
-            }
-        }
-        else
-        {
-            if(i==arg.length()-1)
-            {
-                matrix.push_back(temp);
-            }
-            i++;
-        }
-    }
 
     int determ = (matrix[0][0]*matrix[1][1]*matrix[2][2]) + (matrix[0][1]*matrix[1][2]*matrix[2][0]) + (matrix[1][0]*matrix[0][2]*matrix[2][1])
             - (matrix[2][0]*matrix[1][1]*matrix[0][2]) - (matrix[0][1]*matrix[1][0]*matrix[2][2]) - (matrix[0][0]*matrix[1][2]*matrix[2][1]);
@@ -140,16 +160,17 @@ std::string complanation(std::string arg)
     {
         return "0";
     }
+}
 
-    //PRINT
-    for(int i=0;i<matrix.size();++i)
-    {
-        for(int j=0;j<matrix.size();++j)
-        {
-            cout<<matrix[i][j]<<" ";
-        }
-        cout<<endl;
-    }
+std::string volume_of_parallelepiped(std::string arg)
+{
+    std::vector<std::vector<int>> matrix = Parse_to_3x3(arg);
+
+
+    int determ = (matrix[0][0]*matrix[1][1]*matrix[2][2]) + (matrix[0][1]*matrix[1][2]*matrix[2][0]) + (matrix[1][0]*matrix[0][2]*matrix[2][1])
+            - (matrix[2][0]*matrix[1][1]*matrix[0][2]) - (matrix[0][1]*matrix[1][0]*matrix[2][2]) - (matrix[0][0]*matrix[1][2]*matrix[2][1]);
+
+    return std::to_string(abs(determ));
 }
 
 std::string process(std::string id, std::string arg)
@@ -186,11 +207,11 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=141 && _id<=160)
     {
-        return "";
+        return volume_of_parallelepiped(arg);
     }
     else if(_id>=161 && _id<=180)
     {
-        return "";
+        return square_of_parellelegramm(arg);
     }
     else if(_id>=181 && _id<=200)
     {
@@ -340,10 +361,19 @@ int main()
     string a= "110";
     string b= "{1,2},{2,-1}";
 
+    //FOR SQUARE OF PARALLELEGRAMM
+    string a1= "175";
+    string b1= "{0,1},{1,5}";
+
     //FOR COMPLANATION
     string c="130";
     string d="{1,1,1},{1,3,1},{2,2,2}";
 
-    cout<<process(a, b)<<endl;
+    //FOR VOLUME OF PARALELEPIPED
+    string c1="141";
+    string d1="{19,-4,17},{-5,11,-9},{14,-2,19}";
+
+
+    cout<<process(a1, b1)<<endl;
     return 0;
 }
