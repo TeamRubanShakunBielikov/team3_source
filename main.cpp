@@ -303,6 +303,21 @@ std::string to_polar(std::string arg)
     return temp;
 }
 
+std::string turn_point(std::string& arg)
+{
+    #define PI 3.14159265
+    arg+=",as100as";
+    std::vector<std::vector<int>> matrix=Parse_to_2x2(arg);
+
+    matrix[1][0]*=(PI/180);
+    std::stringstream stream, stream1;
+    stream << std::fixed <<std::setprecision(2) << (matrix[0][0]*cos(matrix[1][0])-matrix[0][1]*sin(matrix[1][0]));
+    stream1 << std::fixed <<std::setprecision(2) << (matrix[0][0]*sin(matrix[1][0])+matrix[0][1]*cos(matrix[1][0]));
+    std::string temp = stream.str();
+    temp+=","+stream1.str();
+    return temp;
+}
+
 std::string process(std::string id, std::string arg)
 {
     int _id=stoi(id);
@@ -365,7 +380,7 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=281 && _id<=300)
     {
-        return "";
+        return turn_point(arg);
     }
     else if(_id>=301 && _id<=320)
     {
@@ -514,6 +529,11 @@ int main()
     //FOR TO POLAR
     std::string a4="270";
     std::string b4="20,15";
-    std::cout<<process(a4, b4)<<std::endl;
+
+    //FOR TURNING OF A POINT
+    std::string a5="290";
+    std::string b5="{4,0},90";
+
+    std::cout<<process(a5, b5)<<std::endl;
     return 0;
 }
