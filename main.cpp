@@ -342,6 +342,6 @@ int main()
     string c="130";
     string d="{1,1,1},{1,3,1},{2,2,2}";
 
-    cout<<process(a, b)<<endl;
+    cout<<process(c, d)<<endl;
     return 0;
 }
