@@ -303,16 +303,16 @@ std::string to_polar(std::string arg)
     return temp;
 }
 
+//PARSER NEED TO OPTIMIZATION!!!!!!
 std::string turn_point(std::string& arg)
 {
     #define PI 3.14159265
     arg+=",as100as";
     std::vector<std::vector<int>> matrix=Parse_to_2x2(arg);
 
-    //matrix[1][0]*=(PI/180);
     std::stringstream stream, stream1;
-    stream << std::fixed <<std::setprecision(2) << ( (matrix[0][0]*cos(matrix[1][0])) - (matrix[0][1]*sin(matrix[1][0])) );
-    stream1 << std::fixed <<std::setprecision(2) << ( (matrix[0][0]*sin(matrix[1][0])) + (matrix[0][1]*cos(matrix[1][0])) );
+    stream << std::fixed <<std::setprecision(2) << ( (matrix[0][0]*cos(matrix[1][0]*(PI/180))) - (matrix[0][1]*sin(matrix[1][0]*(PI/180))) );
+    stream1 << std::fixed <<std::setprecision(2) << ( (matrix[0][0]*sin(matrix[1][0]*(PI/180))) + (matrix[0][1]*cos(matrix[1][0]*(PI/180))) );
     std::string temp = stream.str();
     temp+=","+stream1.str();
     return temp;
