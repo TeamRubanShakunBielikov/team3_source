@@ -3,6 +3,7 @@
 #include<sstream>
 #include <algorithm>
 #include <iomanip>
+#include <vector>
 
 //PARSERS
 
