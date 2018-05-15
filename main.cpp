@@ -7,6 +7,33 @@
 
 //PARSERS
 
+std::vector<int> Parse_to_line(std::string arg)
+{
+    std::vector<int> line;
+    std::string temp_s;
+    for(int i =0;i<arg.length();++i)
+    {
+        int a=0;
+        temp_s="";
+        if(arg[i]>='0' && arg[i]<='9')
+        {
+            if(arg[i-1]=='-')
+            {
+                temp_s+=arg[i-1];
+            }
+
+            while(arg[i]>='0' && arg[i]<='9')
+            {
+                temp_s+=arg[i];
+                i++;
+            }
+            a=stoi(temp_s);
+            line.push_back(a);
+        }
+    }
+    return line;
+}
+
 std::vector<std::vector<int>> Parse_to_3x3(std::string arg)
 {
     std::vector<std::vector<int>> matrix;
@@ -56,7 +83,7 @@ std::vector<std::vector<int>> Parse_to_3x3(std::string arg)
             i++;
         }
     }
- return matrix;
+    return matrix;
 }
 
 
@@ -113,7 +140,23 @@ std::vector<std::vector<int>> Parse_to_2x2(std::string arg)
     return matrix;
 }
 
-
+std::string exist_triangle(std::string arg)
+{
+    std::vector<int> line = Parse_to_line(arg);
+    if(line[0]>line[1]+line[2])
+    {
+        return "0";
+    }
+    else if(line[1]>line[0]+line[2])
+    {
+        return "0";
+    }
+    else if(line[2]>line[0]+line[1])
+    {
+        return "0";
+    }
+    return "1";
+}
 
 //Scalar product must be 0
 std::string orthogonality(std::string arg)
@@ -269,7 +312,7 @@ std::string operations_wth_plurals(std::string arg)
 std::string to_polar(std::string arg)
 {
     std::vector<double> Point;
-    #define PI 3.14159265
+#define PI 3.14159265
 
     //PARSE
     for(int i=0;i<arg.length();++i)
@@ -305,7 +348,7 @@ std::string to_polar(std::string arg)
 
 std::string turn_point(std::string& arg)
 {
-    #define PI 3.14159265
+#define PI 3.14159265
     arg+=",as100as";
     std::vector<std::vector<int>> matrix=Parse_to_2x2(arg);
 
@@ -340,7 +383,7 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=81 && _id<=100)
     {
-        return "";
+        return exist_triangle(arg);
     }
     else if(_id>=101 && _id<=120)
     {
@@ -534,6 +577,10 @@ int main()
     std::string a5="290";
     std::string b5="{4,0},90";
 
-    std::cout<<process(a5, b5)<<std::endl;
+    //FOR EXISTING TRIANGLE
+    std::string a6="85";
+    std::string b6="20,10,5";
+
+    std::cout<<process(a6, b6)<<std::endl;
     return 0;
 }
