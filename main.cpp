@@ -34,6 +34,57 @@ std::vector<int> Parse_to_line(std::string arg)
     return line;
 }
 
+std::vector<std::vector<int>> Parse_to_2x4(std::string arg)
+{
+    std::vector<std::vector<int>> matrix;
+    std::vector<int> temp;
+
+    int jumper=0;
+    for(int i=0; i<arg.length(); ++i)
+    {
+        std::string temp_s="";
+        int a=0;
+        if(arg[i]>='0' && arg[i]<='9')
+        {
+            if(arg[i-1]=='-')
+            {
+                temp_s+=arg[i-1];
+            }
+
+            while(arg[i]>='0' && arg[i]<='9')
+            {
+                temp_s+=arg[i];
+                i++;
+            }
+
+            a=stoi(temp_s);
+
+            if(jumper<4)
+            {
+                temp.push_back(a);
+                jumper++;
+            }
+            else
+            {
+                matrix.push_back(temp);
+                temp.erase(temp.begin(),temp.end());
+                temp.shrink_to_fit();
+                temp.push_back(a);
+                jumper=1;
+            }
+        }
+        else
+        {
+            if(i==arg.length()-1)
+            {
+                matrix.push_back(temp);
+            }
+            i++;
+        }
+    }
+    return matrix;
+}
+
 std::vector<std::vector<int>> Parse_to_3x3(std::string arg)
 {
     std::vector<std::vector<int>> matrix;
@@ -140,6 +191,25 @@ std::vector<std::vector<int>> Parse_to_2x2(std::string arg)
     return matrix;
 }
 
+std::string point_of_crossing(std::string arg)
+{
+//x:=((x1*y2-x2*y1)*(x4-x3)-(x3*y4-x4*y3)*(x2-x1))/((y1-y2)*(x4-x3)-(y3-y4)*(x2-x1));
+//y:=((y3-y4)*x-(x3*y4-x4*y3))/(x4-x3);
+
+//    (((x1<=x)and(x2>=x)and(x3<=x)and(x4>=x))or((y1<=y) and(y2>=y)and(y3<=y)and(y4>=y)))
+    int x,y;
+    std::vector<std::vector<int>> matrix = Parse_to_2x4(arg);
+    x=((matrix[0][0]*matrix[0][3]-matrix[0][2]*matrix[0][1])*(matrix[1][2]-matrix[1][0])-(matrix[1][0]*matrix[1][3]-matrix[1][2]*matrix[1][1])*(matrix[0][2]-matrix[0][0]))/
+      ((matrix[0][1]-matrix[0][3])*(matrix[1][2]-matrix[1][0])-(matrix[1][1]-matrix[1][3])*(matrix[0][2]-matrix[0][0]));
+    y=(((matrix[1][1]-matrix[1][3])*x)-(matrix[1][0]*matrix[1][3]-matrix[1][2]*matrix[1][1]))/(matrix[1][2]-matrix[1][0]);
+
+    if((matrix[0][1]<=x && matrix[0][2]>=x && matrix[1][0]<=x && matrix[1][2]>=x) || (matrix[0][1])<=y && matrix[0][3]>=y && matrix[1][1]<=y && matrix[1][3]>=y)
+    {
+        return "1";
+    }
+   return "0";
+}
+
 std::string exist_triangle(std::string arg)
 {
     std::vector<int> line = Parse_to_line(arg);
@@ -177,7 +247,6 @@ std::string orthogonality(std::string arg)
 std::string square_of_parellelegramm(std::string arg)
 {
     std::vector<std::vector<int>> matrix = Parse_to_3x3(arg);
-
 
     int produce = (matrix[0][0]*matrix[1][0]) + (matrix[0][1]*matrix[1][1]);
     int len_a = sqrt(pow(matrix[0][0],2)+pow(matrix[0][1],2));
@@ -439,7 +508,8 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=361 && _id<=380)
     {
-        return "";
+        //DOESN'T WORK WITH PARALLEL SEGMENTS
+        return point_of_crossing(arg);
     }
     else if(_id>=381 && _id<=400)
     {
@@ -581,6 +651,10 @@ int main()
     std::string a6="85";
     std::string b6="20,10,5";
 
-    std::cout<<process(a6, b6)<<std::endl;
+    //FOR POINT OF CROSSING
+    std::string a7="362";
+    std::string b7="{3,7},{4,-8},{1,9},{15,-4}";
+
+    std::cout<<process(a7, b7)<<std::endl;
     return 0;
 }
