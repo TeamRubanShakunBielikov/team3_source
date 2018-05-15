@@ -15,18 +15,17 @@ std::vector<int> Parse_to_line(std::string arg)
     {
         int a=0;
         temp_s="";
-        if(arg[i]>='0' && arg[i]<='9')
+        while(arg[i]>='0' && arg[i]<='9')
         {
             if(arg[i-1]=='-')
             {
                 temp_s+=arg[i-1];
             }
-
-            while(arg[i]>='0' && arg[i]<='9')
-            {
-                temp_s+=arg[i];
-                i++;
-            }
+            temp_s+=arg[i];
+            i++;
+        }
+        if(!temp_s.empty())
+        {
             a=stoi(temp_s);
             line.push_back(a);
         }
@@ -40,23 +39,22 @@ std::vector<std::vector<int>> Parse_to_2x4(std::string arg)
     std::vector<int> temp;
 
     int jumper=0;
-    for(int i=0; i<arg.length(); ++i)
+    for(int i=0; i<arg.length();)
     {
         std::string temp_s="";
         int a=0;
-        if(arg[i]>='0' && arg[i]<='9')
+        while(arg[i]>='0' && arg[i]<='9')
         {
             if(arg[i-1]=='-')
             {
                 temp_s+=arg[i-1];
             }
+            temp_s+=arg[i];
+            i++;
+        }
 
-            while(arg[i]>='0' && arg[i]<='9')
-            {
-                temp_s+=arg[i];
-                i++;
-            }
-
+        if(!temp_s.empty())
+        {
             a=stoi(temp_s);
 
             if(jumper<4)
@@ -96,19 +94,17 @@ std::vector<std::vector<int>> Parse_to_3x3(std::string arg)
     {
         temp_s="";
         int a=0;
-        if(arg[i]>='0' && arg[i]<='9')
+        while(arg[i]>='0' && arg[i]<='9')
         {
             if(arg[i-1]=='-')
             {
                 temp_s+=arg[i-1];
             }
-
-            while(arg[i]>='0' && arg[i]<='9')
-            {
-                temp_s+=arg[i];
-                i++;
-            }
-
+            temp_s+=arg[i];
+            i++;
+        }
+        if(!temp_s.empty())
+        {
             a = stoi(temp_s);
 
             if(jumper<3)
@@ -149,19 +145,18 @@ std::vector<std::vector<int>> Parse_to_2x2(std::string arg)
     {
         temp_s="";
         int a=0;
-        if(arg[i]>='0' && arg[i]<='9')
+        while(arg[i]>='0' && arg[i]<='9')
         {
             if(arg[i-1]=='-')
             {
                 temp_s+=arg[i-1];
             }
+            temp_s+=arg[i];
+            i++;
+        }
 
-            while(arg[i]>='0' && arg[i]<='9')
-            {
-                temp_s+=arg[i];
-                i++;
-            }
-
+        if(!temp_s.empty())
+        {
             a=stoi(temp_s);
 
             if(jumper<2)
@@ -193,21 +188,40 @@ std::vector<std::vector<int>> Parse_to_2x2(std::string arg)
 
 std::string point_of_crossing(std::string arg)
 {
-//x:=((x1*y2-x2*y1)*(x4-x3)-(x3*y4-x4*y3)*(x2-x1))/((y1-y2)*(x4-x3)-(y3-y4)*(x2-x1));
-//y:=((y3-y4)*x-(x3*y4-x4*y3))/(x4-x3);
+    //x:=((x1*y2-x2*y1)*(x4-x3)-(x3*y4-x4*y3)*(x2-x1))/((y1-y2)*(x4-x3)-(y3-y4)*(x2-x1));
+    //y:=((y3-y4)*x-(x3*y4-x4*y3))/(x4-x3);
 
-//    (((x1<=x)and(x2>=x)and(x3<=x)and(x4>=x))or((y1<=y) and(y2>=y)and(y3<=y)and(y4>=y)))
-    int x,y;
+    //    (((x1<=x)and(x2>=x)and(x3<=x)and(x4>=x))or((y1<=y) and(y2>=y)and(y3<=y)and(y4>=y)))
     std::vector<std::vector<int>> matrix = Parse_to_2x4(arg);
-    x=((matrix[0][0]*matrix[0][3]-matrix[0][2]*matrix[0][1])*(matrix[1][2]-matrix[1][0])-(matrix[1][0]*matrix[1][3]-matrix[1][2]*matrix[1][1])*(matrix[0][2]-matrix[0][0]))/
-      ((matrix[0][1]-matrix[0][3])*(matrix[1][2]-matrix[1][0])-(matrix[1][1]-matrix[1][3])*(matrix[0][2]-matrix[0][0]));
-    y=(((matrix[1][1]-matrix[1][3])*x)-(matrix[1][0]*matrix[1][3]-matrix[1][2]*matrix[1][1]))/(matrix[1][2]-matrix[1][0]);
+    int x1,y1,x2,y2,x3,y3,x4,y4,x,y;
+    x1=matrix[0][0];
+    y1=matrix[0][1];
+    x2=matrix[0][2];
+    y2=matrix[0][3];
 
-    if((matrix[0][1]<=x && matrix[0][2]>=x && matrix[1][0]<=x && matrix[1][2]>=x) || (matrix[0][1])<=y && matrix[0][3]>=y && matrix[1][1]<=y && matrix[1][3]>=y)
+    x3=matrix[1][0];
+    y3=matrix[1][1];
+    x4=matrix[1][2];
+    y4=matrix[1][3];
+
+    int dx1 = x2 - x1;
+    int dy1 = y2 - y1;
+    int dx2 = x4 - x3;
+    int dy2 = y4 - y3;
+    x = dy1 * dx2 - dy2 * dx1;
+    if(!x || !dx2)
+    {
+        return "0";
+    }
+
+    y = x3 * y4 - y3 * x4;
+    x = ((x1 * y2 - y1 * x2) * dx2 - y * dx1) / x;
+    y = (dy2 * x - y) / dx2;
+    if(((x1 <= x && x2 >= x) || (x2 <= x && x1 >= x)) && ((x3 <= x && x4 >= x) || (x4 <= x && x3 >= x)))
     {
         return "1";
     }
-   return "0";
+    return "0";
 }
 
 std::string exist_triangle(std::string arg)
@@ -653,7 +667,7 @@ int main()
 
     //FOR POINT OF CROSSING
     std::string a7="362";
-    std::string b7="{3,7},{4,-8},{1,9},{15,-4}";
+    std::string b7="{-3,-4},{1,2},{-2,3},{3,-1}";
 
     std::cout<<process(a7, b7)<<std::endl;
     return 0;
