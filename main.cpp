@@ -33,6 +33,56 @@ std::vector<int> Parse_to_line(std::string arg)
     return line;
 }
 
+std::vector<std::vector<int>> Parse_to_3x2(std::string arg)
+{
+    std::vector<std::vector<int>> matrix;
+    std::vector<int> temp;
+
+    int jumper=0;
+    for(int i=0; i<arg.length();)
+    {
+        std::string temp_s="";
+        int a=0;
+        while(arg[i]>='0' && arg[i]<='9')
+        {
+            if(arg[i-1]=='-')
+            {
+                temp_s+=arg[i-1];
+            }
+            temp_s+=arg[i];
+            i++;
+        }
+
+        if(!temp_s.empty())
+        {
+            a=stoi(temp_s);
+
+            if(jumper<1)
+            {
+                temp.push_back(a);
+                jumper++;
+            }
+            else
+            {
+                matrix.push_back(temp);
+                temp.erase(temp.begin(),temp.end());
+                temp.shrink_to_fit();
+                temp.push_back(a);
+                jumper=1;
+            }
+        }
+        else
+        {
+            if(i==arg.length()-1)
+            {
+                matrix.push_back(temp);
+            }
+            i++;
+        }
+    }
+    return matrix;
+}
+
 std::vector<std::vector<int>> Parse_to_2x4(std::string arg)
 {
     std::vector<std::vector<int>> matrix;
@@ -186,12 +236,84 @@ std::vector<std::vector<int>> Parse_to_2x2(std::string arg)
     return matrix;
 }
 
+
+/*******************************************************************************************/
+
+std::string integral(std::string arg, int _id)
+{
+    int a,b;
+    double h, result;
+    std::vector<int> matrix = Parse_to_line(arg);
+    int n=2;
+    a = matrix[0];
+    b= matrix[1];
+    h = (b-a)/n;
+
+    if(_id<=5)
+    {
+        while(a<=b)
+        {
+            result+=pow(3,sin(a))*h;
+            a+=h;
+        }
+    }
+    else if(_id<=10)
+    {
+        while(a<=b)
+        {
+            result+=pow(2,cos(a))*h;
+            a+=h;
+        }
+    }
+    else if(_id<=15)
+    {
+        while(a<=b)
+        {
+            result+=(a+sin(pow(a,3)))*h;
+            a+=h;
+        }
+    }
+    else if(_id<=20)
+    {
+        while(a<=b)
+        {
+            result+=(a+cos(pow(a,2)))*h;
+            a+=h;
+        }
+    }
+    else if(_id<=25)
+    {
+        result+=log10(a+sin(a))*h;
+        a+=h;
+    }
+    else if(_id<=30)
+    {
+        result+=((a+sin(a))/log10(a))*h;
+        a+=h;
+    }
+    else if(_id<=35)
+    {
+        result+=((a+cos(a))/log10(a))*h;
+        a+=h;
+    }
+    else
+    {
+        result+=atan(exp(sin(a)))*h;
+        a+=h;
+    }
+    int temp= floor(result);
+    return std::to_string(temp);
+}
+
+std::string triangle_orientation(std::string arg)
+{
+    std::vector<std::vector<int>> matrix = Parse_to_3x2(arg);
+    //if(matrix[0][1])
+    return " ";
+}
+
 std::string point_of_crossing(std::string arg)
 {
-    //x:=((x1*y2-x2*y1)*(x4-x3)-(x3*y4-x4*y3)*(x2-x1))/((y1-y2)*(x4-x3)-(y3-y4)*(x2-x1));
-    //y:=((y3-y4)*x-(x3*y4-x4*y3))/(x4-x3);
-
-    //    (((x1<=x)and(x2>=x)and(x3<=x)and(x4>=x))or((y1<=y) and(y2>=y)and(y3<=y)and(y4>=y)))
     std::vector<std::vector<int>> matrix = Parse_to_2x4(arg);
     int x1,y1,x2,y2,x3,y3,x4,y4,x,y;
     x1=matrix[0][0];
@@ -313,7 +435,7 @@ std::string addition_to_plural(std::string arg)
 }
 
 //LOOK AT ME!!!!
-//NEED TO OPTIMISATION!!!!!!!!!!
+//NEED TO OPTIMIZATION!!!!!!!!!!
 std::string operations_wth_plurals(std::string arg)
 {
     std::string A, B, Section, Union, DiffA_B, DiffB_A;
@@ -454,7 +576,8 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=1 && _id<=40)
     {
-        return "";
+        //METHOD OF RECTANGLES
+        return integral(arg, _id);
     }
     else if(_id>=41 && _id<=60)
     {
@@ -518,7 +641,7 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=341 && _id<=360)
     {
-        return "";
+        return triangle_orientation(arg);
     }
     else if(_id>=361 && _id<=380)
     {
@@ -669,6 +792,14 @@ int main()
     std::string a7="362";
     std::string b7="{-3,-4},{1,2},{-2,3},{3,-1}";
 
-    std::cout<<process(a7, b7)<<std::endl;
+    //FOR TRIANGLE ORIENTATION
+    std::string a8="341";
+    std::string b8="{0,0},{-4,4},{8,8}";
+
+    //FOR INTEGRAL
+    std::string a9="7";
+    std::string b9="5,10";
+
+    std::cout<<process(a9, b9)<<std::endl;
     return 0;
 }
