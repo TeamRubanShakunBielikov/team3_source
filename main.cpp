@@ -183,7 +183,6 @@ std::vector<std::vector<int>> Parse_to_3x3(std::string arg)
     return matrix;
 }
 
-
 std::vector<std::vector<int>> Parse_to_2x2(std::string arg)
 {
     std::vector<std::vector<int>> matrix;
@@ -238,6 +237,52 @@ std::vector<std::vector<int>> Parse_to_2x2(std::string arg)
 
 
 /*******************************************************************************************/
+
+std::string quadratic_equation(std::string arg)
+{
+    double a,b,c, D, sD, x1, x2;
+    std::string temp;
+    std::vector<int> matrix = Parse_to_line(arg);
+
+    a = matrix[0];
+    b= matrix[1];
+    c= matrix[2];
+
+    D = pow(b,2)-4*a*c;
+    if(D>=0)
+    {
+        sD = sqrt(D);
+
+        x1 = (-b+sD)/(2*a);
+        x2 = (-b-sD)/(2*a);
+
+        std::stringstream stream, stream1;
+        stream << std::fixed << std::setprecision(2) << x1;
+        stream1 << std::fixed << std::setprecision(2) << x2;
+        if(x1<x2)
+        {
+            temp = stream.str()+","+stream1.str();
+        }
+        else
+        {
+            temp = stream1.str()+","+stream.str();
+        }
+    }
+    else
+    {
+        sD = sqrt(abs(D));
+
+        x1 = (-b)/(2*a);
+        x2 = (sD/2*a);
+
+        std::stringstream stream, stream1;
+        stream << std::fixed << std::setprecision(2) << x1;
+        stream1 << std::fixed << std::setprecision(2) << x2;
+
+        temp = stream.str()+","+stream1.str()+"i";
+    }
+    return temp;
+}
 
 std::string integral(std::string arg, int _id)
 {
@@ -305,6 +350,7 @@ std::string integral(std::string arg, int _id)
     return std::to_string(temp);
 }
 
+//HAVEN'T DONE
 std::string triangle_orientation(std::string arg)
 {
     std::vector<std::vector<int>> matrix = Parse_to_3x2(arg);
@@ -581,7 +627,7 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=41 && _id<=60)
     {
-        return "";
+        return quadratic_equation(arg);
     }
     else if(_id>=61 && _id<=80)
     {
@@ -645,7 +691,6 @@ std::string process(std::string id, std::string arg)
     }
     else if(_id>=361 && _id<=380)
     {
-        //DOESN'T WORK WITH PARALLEL SEGMENTS
         return point_of_crossing(arg);
     }
     else if(_id>=381 && _id<=400)
@@ -752,54 +797,71 @@ std::string process(std::string id, std::string arg)
 
 int main()
 {
+    //1
     //FOR ORTHOGONALITY
     std::string a= "110";
     std::string b= "{1,2},{2,-1}";
 
+    //2
     //FOR SQUARE OF PARALLELEGRAMM
     std::string a1= "175";
     std::string b1= "{0,1},{1,5}";
 
+    //3
     //FOR COMPLANATION
     std::string c="130";
     std::string d="{1,1,1},{1,3,1},{2,2,2}";
 
+    //4
     //FOR VOLUME OF PARALELEPIPED
     std::string c1="141";
     std::string d1="{19,-4,17},{-5,11,-9},{14,-2,19}";
 
+    //5
     //FOR ADDIRIONAL TO PLURAL
     std::string a2="230";
     std::string b2="579ABCE";
 
+    //6
     //FOR COUNT IN UNION, SECTION, DIFFERENCE
     std::string a3="250";
     std::string b3="05A,7C";
 
+    //7
     //FOR TO POLAR
     std::string a4="270";
     std::string b4="20,15";
 
+    //8
     //FOR TURNING OF A POINT
     std::string a5="290";
     std::string b5="{4,0},90";
 
+    //9
     //FOR EXISTING TRIANGLE
     std::string a6="85";
     std::string b6="20,10,5";
 
+    //10
     //FOR POINT OF CROSSING
     std::string a7="362";
     std::string b7="{-3,-4},{1,2},{-2,3},{3,-1}";
 
+    //11
     //FOR TRIANGLE ORIENTATION
     std::string a8="341";
     std::string b8="{0,0},{-4,4},{8,8}";
 
+    //12
     //FOR INTEGRAL
     std::string a9="7";
     std::string b9="5,10";
 
-    std::cout<<process(a9, b9)<<std::endl;
+    //13
+    //FOR QUADRATIC EQUATION
+    std::string a10="45";
+    std::string b10="1,-6,34";
+
+    std::cout<<process(a10, b10)<<std::endl;
     return 0;
 }
